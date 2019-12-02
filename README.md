@@ -4,11 +4,57 @@ verifiable searchable symmetric encryption (database
 
 ## Tech Stack
 
-- Language: Java
+- Language: Java `11.X`
+- MySQL: `8.0+`
 - Package Control manager: maven
 
+## Project Structure
+
+### /Init
+
+用于项目新开始所需要执行的步骤\
+jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairing.html)
+- ParamsPropertiesGenerator 用于创建jPBC的基础参数,`没有对TYPE_A.properties的特殊需求不需要启动`, 花费时间比较长(实际上MBP-15'花了2Hours+没有跑出来)
+- 提高效率，只用Bilinear话，在Pairing之前加入此代码:`PairingFactory.getInstance().setUsePBCWhenPossible(true);` [Ref](http://gas.dia.unisa.it/projects/jpbc/docs/pairing.html#.XcFfM5Iza2A)
+
+### /db
+
+数据库相关操作.
+
+### /utils
+
+>Clusion
+>
+CryptoPrimitives  
+Printer print message by level
+
+### /test
+
+测试文件, 使用JUnit4, 参考自[JUnit4](junit1)
+
+## resources资源
+
+如何读取参考 [resource](rsc)
+
+### params
+
+由jPBC自带，暂时只用typeA的参数`a.properties`
+
+## TODO
+
+1. 若知道匹配次数匹配次数, 则可实现[pre-processing](http://gas.dia.unisa.it/projects/jpbc/docs/pairing.html)
+2. 重写暂时不用`多线程`操作.
+3. 启用MySQL连接池,降低多次连接资源开销(T2)
 
 ## Based on links
 
-- [SSE-github](https://github.com/encryptedsystems/Clusion)
+- [SSE-Clusion](https://github.com/encryptedsystems/Clusion) > Google Guava
 - [preLab-crypt-misc](https://github.com/zhangzhongjun/CryptographyRepository)
+- [jPBC-paper](https://ieeexplore.ieee.org/document/5983948/?arnumber=5983948)
+- [jPBC-doc](http://gas.dia.unisa.it/projects/jpbc/docs)
+- [jPBC-demos](https://www.programcreek.com/java-api-examples/?api=it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory)
+
+[jdbc1]: https://www.cnblogs.com/Qian123/p/5339164.html
+
+[junit1]: https://juejin.im/post/5c7fbfdd6fb9a049ef275a60
+[rsc]: https://www.mkyong.com/java/java-read-a-file-from-resources-folder/
