@@ -9,7 +9,7 @@ public class ThreadTest {
   private Object object = new Object();
 
   public static void main(String[] args) throws IOException {
-    var test = new ThreadTest();
+    ThreadTest test = new ThreadTest();
     MyThread thread1 = test.new MyThread();
     MyThread thread2 = test.new MyThread();
     thread1.start();

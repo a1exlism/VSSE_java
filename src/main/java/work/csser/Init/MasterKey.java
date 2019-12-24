@@ -7,6 +7,7 @@ import work.csser.utils.SerializableElement;
 import work.csser.utils.SerializationDemonstrator;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author a1exlism
@@ -37,7 +38,6 @@ public class MasterKey implements Serializable {
 
   private MasterKey(long p, long q, byte[] Kx, byte[] Ki, byte[] Kz, byte[] Ks,
                     SerializableElement g1, SerializableElement g2, SerializableElement g3, SerializableElement s) {
-    //  TODO: check why origin codes | kx,kz,ks
     this.p = p;
     this.q = q;
     this.Kx = Kx;
@@ -56,7 +56,7 @@ public class MasterKey implements Serializable {
    * @return void
    * @method initial
    */
-  public static void generate() {
+  public static void generateKey() {
     Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
 
     byte[] Kx = CryptoPrimitives.randomBytes(128 / 8);
@@ -72,6 +72,13 @@ public class MasterKey implements Serializable {
 
     MasterKey mk = new MasterKey(0, 0, Kx, Ki, Kz, Ks, g1, g2, g3, s);
     SerializationDemonstrator.serialize(mk, "keys", "master.key");
+
+    //  For test
+//    System.out.println("For Test: " + mk.toString());
+  }
+
+  public static MasterKey readKey() {
+    return SerializationDemonstrator.deserialize("keys", "master.key");
   }
 
   public long getP() {
@@ -112,5 +119,35 @@ public class MasterKey implements Serializable {
 
   public SerializableElement getS() {
     return s;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("===========Master Key===========");
+    sb.append(System.lineSeparator());
+    sb.append("p: ").append(p);
+    sb.append(System.lineSeparator());
+    sb.append("q: ").append(q);
+    sb.append(System.lineSeparator());
+    sb.append("Kx: ").append(Arrays.toString(Kx));
+    sb.append(System.lineSeparator());
+    sb.append("Ki: ").append(Arrays.toString(Ki));
+    sb.append(System.lineSeparator());
+    sb.append("Kz: ").append(Arrays.toString(Kz));
+    sb.append(System.lineSeparator());
+    sb.append("Ks: ").append(Arrays.toString(Ks));
+    sb.append(System.lineSeparator());
+    sb.append("g1: ").append(g1.toString());
+//    sb.append("g1 bytes: ").append(Arrays.toString(g1.getElement().toBytes()));
+    sb.append(System.lineSeparator());
+    sb.append("g2: ").append(g2.toString());
+    sb.append(System.lineSeparator());
+    sb.append("g3: ").append(g3.toString());
+    sb.append(System.lineSeparator());
+    sb.append("s: ").append(s.toString());
+    sb.append(System.lineSeparator());
+    sb.append("=================================================");
+    return sb.toString();
   }
 }

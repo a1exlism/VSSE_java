@@ -11,6 +11,10 @@ import org.junit.Test;
 public class MasterKeyTest {
   @Test
   public void initialTest() {
-    MasterKey.generate();
+    //  generate
+    MasterKey.generateKey();
+    //  recovery
+    System.out.println(MasterKey.readKey().toString());
+    MasterKey.readKey();
   }
 }

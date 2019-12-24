@@ -10,6 +10,7 @@ import java.io.*;
  * @className SerializationDemonstrator
  * @description Simple serialization/deserialization demonstrator.
  * Working in workspace user.dir
+ *
  * @link http://marxsoftware.blogspot.com/2014/02/serializing-java-objects-with-non.html
  * @link2 https://stackoverflow.com/questions/9620683/java-fileoutputstream-create-file-if-not-exists
  */
@@ -40,7 +41,7 @@ public class SerializationDemonstrator {
     try (FileOutputStream fos = new FileOutputStream(pPath + File.separator + fileName);
          ObjectOutputStream oos = new ObjectOutputStream(fos)) {
       oos.writeObject(objectToSerialize);
-      out.println("Serialization of Object " + objectToSerialize + " completed.");
+//      out.println("=== Serialization of Object === Demonstrator ===\n" + objectToSerialize + " completed.");
     } catch (IOException ioException) {
       ioException.printStackTrace();
     }
@@ -50,33 +51,26 @@ public class SerializationDemonstrator {
    * Provides an object deserialized from the file indicated by the provided
    * file name.
    *
-   * @param <T>                    Type of object to be deserialized.
-   * @param relativePath           parent path for filename(in workspace)
-   * @param fileToDeserialize      Name of file from which object is to be deserialized.
-   * @param classBeingDeserialized Class definition of object to be deserialized
-   *                               from the file of the provided name/path; it is recommended that this
-   *                               class define its own toString() implementation as that will be used in
-   *                               this method's status output.
+   * @param <T>               Type of object to be deserialized.
+   * @param relativePath      parent path for filename(in workspace)
+   * @param fileToDeserialize Name of file from which object is to be deserialized.
    * @return Object deserialized from provided filename as an instance of the
    * provided class; may be null if something goes wrong with deserialization.
    * @throws IllegalArgumentException Thrown if either provided parameter is null.
    */
-  public static <T> T deserialize(final String relativePath, final String fileToDeserialize, final Class<T> classBeingDeserialized) {
+  public static <T> T deserialize(final String relativePath, final String fileToDeserialize) {
     //  check file existence
     File file = new File(workspace + File.separator + relativePath + File.separator + fileToDeserialize);
 
     if (!file.isFile()) {
       throw new IllegalArgumentException("Cannot deserialize from a null filename.");
     }
-    if (classBeingDeserialized == null) {
-      throw new IllegalArgumentException("Type of class to be deserialized cannot be null.");
-    }
 
     T objectOut = null;
     try (FileInputStream fis = new FileInputStream(file);
          ObjectInputStream ois = new ObjectInputStream(fis)) {
       objectOut = (T) ois.readObject();
-      out.println("Deserialization of Object " + objectOut + " is completed.");
+//      out.println("=== Deserialization of Object === Demonstrator===\n" + objectOut + " is completed.");
     } catch (IOException | ClassNotFoundException exception) {
       exception.printStackTrace();
     }

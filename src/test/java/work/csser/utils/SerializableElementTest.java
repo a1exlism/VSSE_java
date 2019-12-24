@@ -32,8 +32,8 @@ public class SerializableElementTest {
 
   @Test
   public void getFieldLenTest() {
-    var g = pairing.getG1().newRandomElement().getImmutable();
-    var z = pairing.getZr().newRandomElement().getImmutable();
+    Element g = pairing.getG1().newRandomElement().getImmutable();
+    Element z = pairing.getZr().newRandomElement().getImmutable();
     System.out.println("g \\in G1 :" + g.toString() + " Length: " + g.toString().length());
     System.out.println("z \\in Zr :" + z.toString() + " Length: " + z.toString().length());
   }

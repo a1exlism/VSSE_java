@@ -2,6 +2,10 @@
 
 verifiable searchable symmetric encryption (database
 
+## Paper
+
+Towards Efficient Verifiable Conjunctive Keyword Search for Large Encrypted Database
+
 ## Tech Stack
 
 - Language: Java `11.X`
@@ -46,9 +50,10 @@ jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairin
 ## Problem & Improve
 
 1. [ ] EDBSetup 大素数源代码`p`,`q`和乘积`n`均为 0;
-2. [ ] SerializableElement 直接改成 Element;
-3. [ ] PRF /Init/MasterKey 可以只写一个byte作random
-4. 
+2. [ ] utils/SerializableElement/readObject 判定`存疑`🤨, 不清楚他的具体判断;
+3. [ ] PRF /Init/MasterKey 可以只写一个byte作random;
+4. [ ] 论文中的 ${ Z_n^* }$ 和 jpbc中的 ${Z_r^*}$ 区别很大, 论文中 ${n = p \times q}$, 如果有 ${Z_r}$ 域可以选择mod就好了;
+5. [ ] 论文中 secret key ${sk = s}$ 是怎么生成的;
 
 ## TODO
 
