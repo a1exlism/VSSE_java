@@ -14,6 +14,10 @@ Towards Efficient Verifiable Conjunctive Keyword Search for Large Encrypted Data
 
 ## Project Structure
 
+### jPBC
+
+该库中的`Element`计算过程会直接**更改 Element**自身, 所以必须使用`duplicate()`.
+
 ### /Init
 
 用于项目新开始所需要执行的步骤\
@@ -21,6 +25,7 @@ jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairin
 
 - ParamsPropertiesGenerator 用于创建 jPBC 的基础参数,`没有对TYPE_A.properties的特殊需求不需要启动`, 花费时间比较长(实际上 MBP-15'花了 2Hours+没有跑出来)
 - 提高效率，只用 Bilinear 话，在 Pairing 之前加入此代码:`PairingFactory.getInstance().setUsePBCWhenPossible(true);` [Ref](http://gas.dia.unisa.it/projects/jpbc/docs/pairing.html#.XcFfM5Iza2A)
+- PublicKey Gen: 发现原先代码指数 exp 错误, 已改正 12-25-2019
 
 ### /db
 
@@ -49,11 +54,17 @@ jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairin
 
 ## Problem & Improve
 
-1. [ ] EDBSetup 大素数源代码`p`,`q`和乘积`n`均为 0;
+### Alg.1 EDBSetup
+
+1. [ ] 大素数源代码`p`,`q`和乘积`n`均为 0;
 2. [ ] utils/SerializableElement/readObject 判定`存疑`🤨, 不清楚他的具体判断;
-3. [ ] PRF /Init/MasterKey 可以只写一个byte作random;
-4. [ ] 论文中的 ${ Z_n^* }$ 和 jpbc中的 ${Z_r^*}$ 区别很大, 论文中 ${n = p \times q}$, 如果有 ${Z_r}$ 域可以选择mod就好了;
-5. [ ] 论文中 secret key ${sk = s}$ 是怎么生成的;
+3. [ ] PRF /Init/MasterKey 可以只写一个 byte 作 random;
+4. [ ] 论文中的 ${ Z_n^* }$ 和 jpbc 中的 ${Z_r^*}$ 区别很大, 论文中 ${n = p \times q}$, 如果有 ${Z_r}$ 域可以选择 mod 就好了;
+5. [ ] 论文中 secret key ${sk = s}$ 是怎么生成的?;
+6. [x] ${z \leftarrow F_p(K_Z,g^{\frac{1}{w}} \textnormal{ mod } n \parallel c)}$
+   - ${c}$ 是`级联`;
+
+### Alg.2 etc
 
 ## TODO
 

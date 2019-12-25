@@ -67,14 +67,14 @@ public class MasterKey implements Serializable {
     SerializableElement g1 = new SerializableElement(pairing.getZr().newRandomElement());
     SerializableElement g2 = new SerializableElement(pairing.getZr().newRandomElement());
     SerializableElement g3 = new SerializableElement(pairing.getZr().newRandomElement());
-    //  s???
+    //  sk
     SerializableElement s = new SerializableElement(pairing.getZr().newRandomElement());
 
-    MasterKey mk = new MasterKey(0, 0, Kx, Ki, Kz, Ks, g1, g2, g3, s);
-    SerializationDemonstrator.serialize(mk, "keys", "master.key");
+    MasterKey MK = new MasterKey(0, 0, Kx, Ki, Kz, Ks, g1, g2, g3, s);
+    SerializationDemonstrator.serialize(MK, "keys", "master.key");
 
     //  For test
-//    System.out.println("For Test: " + mk.toString());
+//    System.out.println("For Test: " + MK.toString());
   }
 
   public static MasterKey readKey() {
@@ -124,7 +124,7 @@ public class MasterKey implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("===========Master Key===========");
+    sb.append("===========Master Key:{K_X,K_I,K_Z,K_S,p,q,s}===========");
     sb.append(System.lineSeparator());
     sb.append("p: ").append(p);
     sb.append(System.lineSeparator());

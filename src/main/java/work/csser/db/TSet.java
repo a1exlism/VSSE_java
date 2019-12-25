@@ -1,6 +1,7 @@
 package work.csser.db;
 
 import it.unisa.dia.gas.jpbc.Element;
+import work.csser.utils.SerializableElement;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -18,14 +19,14 @@ public class TSet implements Serializable {
   //  cipher from fileName
   private byte[] e;
   //  index
-  private Element y;
+  private SerializableElement y;
   //  keywords - TSet
   private String keyword;
 
   public TSet(String l, byte[] e, Element y, String keyword) {
     this.l = l;
     this.e = e;
-    this.y = y;
+    this.y = new SerializableElement(y);
     this.keyword = keyword;
   }
 
@@ -37,16 +38,20 @@ public class TSet implements Serializable {
     return l;
   }
 
+  public SerializableElement getY() {
+    return y;
+  }
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("===您正在查看TSet的信息===");
+    sb.append("=== TSet Info ===");
     sb.append(System.lineSeparator());
-    sb.append("\t" + "标签label: ").append(l);
+    sb.append("\t" + "标签 Tag | label: ").append(l);
     sb.append(System.lineSeparator());
-    sb.append("\t" + "密文e: ").append(Arrays.toString(e));
+    sb.append("\t" + "密文 Cipher | e: ").append(Arrays.toString(e));
     sb.append(System.lineSeparator());
-    sb.append("\t" + "索引y: ").append(y.toString());
+    sb.append("\t" + "索引 Index | y: ").append(y.toString());
     sb.append(System.lineSeparator());
     sb.append("====================================");
     return sb.toString();
