@@ -89,5 +89,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.16</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.alexandrnikitin/bloom-filter -->
+        <dependency>
+            <groupId>com.github.alexandrnikitin</groupId>
+            <artifactId>bloom-filter_2.12</artifactId>
+            <version>0.11.0</version>
+        </dependency>
     </dependencies>
 </project>

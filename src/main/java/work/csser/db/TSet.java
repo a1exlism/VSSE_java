@@ -42,6 +42,11 @@ public class TSet implements Serializable {
     return y;
   }
 
+  public String getKeyword() {
+    return keyword;
+  }
+
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

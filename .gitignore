@@ -1,6 +1,6 @@
 # customize
-keys/
-libs/
+keys/*.key
+BloomFilter/*.bf
 
 # Created by https://www.gitignore.io/api/vim,java,macos,maven,java-web,intellij,jetbrains,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vim,java,macos,maven,java-web,intellij,jetbrains,visualstudiocode

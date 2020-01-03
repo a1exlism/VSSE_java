@@ -31,6 +31,8 @@ jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairin
 
 数据库相关操作.
 
+Efficiency: sql 语句预处理 [sql prepared statement]
+
 ### /utils
 
 > Clusion
@@ -73,13 +75,19 @@ jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairin
         BETTER flexible 的方式可以在 Setup 的过程中 data owner 创建每个 keyword(encrypted)和其对应的文件数量, 到时候直接查询即可减少大量的循环.
 4. [ ] line-5 g^exp 需要 pow 还是 powZn(jpbc)?
 
+### DB
+
+1. [ ] insertKeyPairSet
+       与 WangScheme 差别比较大, 均使用了原生函数. ATTENTION need check
+
 ### Alg.3 etc
 
 ## TODO
 
-1. [ ] 若知道匹配次数匹配次数, 则可实现[pre-processing](http://gas.dia.unisa.it/projects/jpbc/docs/pairing.html)
-2. [ ] 重写暂时不用`多线程`操作.
-3. [ ] 启用 MySQL 连接池,降低多次连接资源开销(T2)
+1. [ ] db/DBModule 利用`BloomFilter`判断 XSet 是否在 XSets;
+2. [ ] 若知道匹配次数匹配次数, 则可实现[pre-processing];
+3. [ ] 重写暂时不用`多线程`操作.
+4. [ ] 启用 MySQL 连接池,降低多次连接资源开销(T2)
 
 ## Based on links
 
@@ -92,3 +100,5 @@ jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairin
 [jdbc1]: https://www.cnblogs.com/Qian123/p/5339164.html
 [junit1]: https://juejin.im/post/5c7fbfdd6fb9a049ef275a60
 [rsc]: https://www.mkyong.com/java/java-read-a-file-from-resources-folder/
+[sql prepared statement]: https://dev.mysql.com/doc/refman/8.0/en/sql-prepared-statements.html
+[pre-processing]: http://gas.dia.unisa.it/projects/jpbc/docs/pairing.html
