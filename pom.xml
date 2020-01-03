@@ -18,6 +18,41 @@
                     <release>11</release>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <executions>
+                    <execution>
+                        <id>install-jpbc</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>it.unisa.dia.gas</groupId>
+                            <artifactId>jpbc</artifactId>
+                            <version>2.0.0</version>
+                            <packaging>jar</packaging>
+                            <file>libs/jpbc-api-2.0.0.jar</file>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-plaf</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>it.unisa.dia.gas.plaf</groupId>
+                            <artifactId>jpbc</artifactId>
+                            <version>2.0.0</version>
+                            <packaging>jar</packaging>
+                            <file>libs/jpbc-plaf-2.0.0.jar</file>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <properties>
@@ -29,6 +64,12 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.8.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-install-plugin -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>2.5.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
         <dependency>

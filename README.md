@@ -60,11 +60,20 @@ jPBC initial link refer [this](http://gas.dia.unisa.it/projects/jpbc/docs/pairin
 2. [ ] utils/SerializableElement/readObject 判定`存疑`🤨, 不清楚他的具体判断;
 3. [ ] PRF /Init/MasterKey 可以只写一个 byte 作 random;
 4. [ ] 论文中的 ${ Z_n^* }$ 和 jpbc 中的 ${Z_r^*}$ 区别很大, 论文中 ${n = p \times q}$, 如果有 ${Z_r}$ 域可以选择 mod 就好了;
-5. [ ] 论文中 secret key ${sk = s}$ 是怎么生成的?;
+5. [x] 论文中 secret key ${sk = s}$ 是怎么生成的?;\
+        ${\mathbb{G}}$ 域生成即可(by Wang.); 使用过程中用了 ${\mathbb{Z_r}}$
 6. [x] ${z \leftarrow F_p(K_Z,g^{\frac{1}{w}} \textnormal{ mod } n \parallel c)}$
    - ${c}$ 是`级联`;
 
-### Alg.2 etc
+### Alg.2 TokenGen
+
+1. line-2: ${1/w_1}$ 中 ${w_1}$ str2byte;
+2. 论文里面的 ${K_T}$ 为笔误;
+3. [ ] line-3 暂时设置为 keyword 固定对应的 fileId 数量(count);\
+        BETTER flexible 的方式可以在 Setup 的过程中 data owner 创建每个 keyword(encrypted)和其对应的文件数量, 到时候直接查询即可减少大量的循环.
+4. [ ] line-5 g^exp 需要 pow 还是 powZn(jpbc)?
+
+### Alg.3 etc
 
 ## TODO
 
