@@ -1,6 +1,7 @@
 package work.csser.Init;
 
 import org.junit.Test;
+import work.csser.VEDBSetup;
 import work.csser.db.KeywordPairSet;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class VEDBTest {
     for (int i = 0; i < 10; i++) {
       filenames.add("ind" + i);
     }
-    KeywordPairSet kps = VEDB.setup(keyword, filenames);
+    KeywordPairSet kps = VEDBSetup.store(keyword, filenames);
     System.out.println(kps);
 
     System.out.println("length:\t" + kps.getTSets().get(0).getL().length() + System.lineSeparator() + "\t" + kps.getTSets().get(0).getL());

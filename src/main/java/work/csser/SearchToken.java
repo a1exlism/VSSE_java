@@ -1,4 +1,4 @@
-package work.csser.auth;
+package work.csser;
 
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
- * Algorithm 2.TokenGen() For search
+ * Algorithm 2.TokenGen() For `authenticated` search
  *
  * @author a1exlism
  * @className SearchToken
@@ -62,7 +62,7 @@ public class SearchToken {
    *
    * @param kws: all search keywords
    * @param lfc: least frequency keyword file count
-   * @return work.csser.auth.SearchToken
+   * @return work.csser.SearchToken
    * @method TokenGen
    * @params [kws, lfc]
    */

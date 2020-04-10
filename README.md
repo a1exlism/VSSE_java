@@ -9,7 +9,7 @@ Towards Efficient Verifiable Conjunctive Keyword Search for Large Encrypted Data
 ## Tech Stack
 
 - Language: Java `11.X`
-- MySQL: `8.0+`
+- Database: `MongoDB 4.2.x`
 - Package Control manager: maven
 
 ## Project Structure
@@ -42,7 +42,8 @@ Efficiency: sql 语句预处理 [sql prepared statement]
 
 ### /test
 
-测试文件, 使用 JUnit4, 参考自[JUnit4](junit1)
+- 测试文件, 使用 JUnit4, 参考自[JUnit4](junit1);
+- 在实例数据测试过程中可以使用 `tee` 同时输出 screen 和 file;
 
 ### resources 资源
 
@@ -59,13 +60,16 @@ Efficiency: sql 语句预处理 [sql prepared statement]
 ### Alg.1 EDBSetup
 
 1. [ ] 大素数源代码`p`,`q`和乘积`n`均为 0;
-2. [ ] utils/SerializableElement/readObject 判定`存疑`🤨, 不清楚他的具体判断;
-3. [ ] PRF /Init/MasterKey 可以只写一个 byte 作 random;
-4. [ ] 论文中的 ${ Z_n^* }$ 和 jpbc 中的 ${Z_r^*}$ 区别很大, 论文中 ${n = p \times q}$, 如果有 ${Z_r}$ 域可以选择 mod 就好了;
-5. [x] 论文中 secret key ${sk = s}$ 是怎么生成的?;\
-        ${\mathbb{G}}$ 域生成即可(by Wang.); 使用过程中用了 ${\mathbb{Z_r}}$
-6. [x] ${z \leftarrow F_p(K_Z,g^{\frac{1}{w}} \textnormal{ mod } n \parallel c)}$
+2. [ ] PRF /Init/MasterKey 可以只写一个 byte 作 random;
+3. [ ] 论文中的 ${ Z_n^* }$ 和 jpbc 中的 ${Z_r^*}$ 区别很大, 论文中 ${n = p \times q}$, 如果有 ${Z_r}$ 域可以选择 mod 就好了;
+4. [ ] 论文中 secret key ${sk = s}$ 是怎么生成的?;\
+        ~~${\mathbb{G}}$ 域生成即可(by Wang.); 使用过程中用了 ${\mathbb{Z_r}}$~~
+       Updated: ${s \in \mathbb{Z_p}, p \in Prime}$ ATTENTION 需要更新.(Paper.Building Block)
+5. [x] ${z \leftarrow F_p(K_Z,g^{\frac{1}{w}} \textnormal{ mod } n \parallel c)}$
    - ${c}$ 是`级联`;
+6. [ ] ATTENTION 安全参数 ${\lambda}$ 应该是参考自[Supporting Non-membership Proofs with Bilinear-map Accumulators]
+       同时需要更改 `PRF_F` 和 `PRF_Fp` 因为他们两个随机函数均参考 ${\lambda}$;
+7. [ ] 发现一个问题 ${t}$ 所代表的是每个 keyword 所对应的 documents 的数量, 也就是`不支持dynamic`操作.
 
 ### Alg.2 TokenGen
 
@@ -74,6 +78,13 @@ Efficiency: sql 语句预处理 [sql prepared statement]
 3. [ ] line-3 暂时设置为 keyword 固定对应的 fileId 数量(count);\
         BETTER flexible 的方式可以在 Setup 的过程中 data owner 创建每个 keyword(encrypted)和其对应的文件数量, 到时候直接查询即可减少大量的循环.
 4. [ ] line-5 g^exp 需要 pow 还是 powZn(jpbc)?
+
+### Bilinear Accumulators
+
+1. 代码中方案 BA public key 为了方便实现, 并没有采取每次进行`授权生成set`${\{g^{k^i}|0 \leqslant i \leqslant q\}}$ 的方案;
+   ATTENTION: 可能需要改进
+
+2.
 
 ### DB
 
@@ -102,3 +113,4 @@ Efficiency: sql 语句预处理 [sql prepared statement]
 [rsc]: https://www.mkyong.com/java/java-read-a-file-from-resources-folder/
 [sql prepared statement]: https://dev.mysql.com/doc/refman/8.0/en/sql-prepared-statements.html
 [pre-processing]: http://gas.dia.unisa.it/projects/jpbc/docs/pairing.html
+[supporting non-membership proofs with bilinear-map accumulators]: http://eprint.iacr.org/2008/538

@@ -1,4 +1,4 @@
-package work.csser.utils;
+package work.csser.Init;
 
 import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.jpbc.PairingParametersGenerator;
@@ -7,6 +7,11 @@ import work.csser.utils.Common;
 
 import java.io.IOException;
 
+/**
+ * ATTENTION this may take a lot times, and it's NOT necessary.
+ * Description: Generate Params for jPBC;
+ * This class SHOULD run before all java and default params is a.properties;
+ */
 public class ParamsPropertiesGenerator {
   /**
    * generate random curve params provided by jPBC library

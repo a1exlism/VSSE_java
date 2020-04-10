@@ -41,6 +41,7 @@ public class PublicKey implements Serializable {
    *
    * @param MK: master key MK
    * @param t:  upper bound on the number of the cardinality(by Paper
+   *         which means 'the number of documents associated keyword in Setup'
    * @return void
    * @method generateKey
    * @params [MK, t]

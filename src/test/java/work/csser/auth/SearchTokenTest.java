@@ -1,6 +1,7 @@
 package work.csser.auth;
 
 import org.junit.Test;
+import work.csser.SearchToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;

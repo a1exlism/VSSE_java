@@ -1,9 +1,11 @@
-package work.csser.Init;
+package work.csser;
 
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
+import work.csser.Init.MasterKey;
+import work.csser.Init.PublicKey;
 import work.csser.db.KeywordPairSet;
 import work.csser.db.TSet;
 import work.csser.utils.Common;
@@ -14,25 +16,26 @@ import java.util.Arrays;
 
 /**
  * @author a1exlism
- * @className VEDB
+ * @className VEDBSetup
  * @description Verifiable Encrypted DataBase SYSTEM
  * @since 2019/12/7 20:34
  */
-public class VEDB {
+public class VEDBSetup {
   final static private Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
   private static MasterKey MK = MasterKey.readKey();
   private static PublicKey PK = PublicKey.readKey();
 
   /**
-   * Algorithm 1_for loop
+   * Algorithm 1 line 8-15 for loop
    *
-   * @param keyword:
-   * @param filenames:
+   * @param keyword:   w
+   * @param filenames: ids
    * @return KeywordPairSet[TSets, XSets, stagw]
-   * @method setup
+   * @method KwPairGen
+   * @description generate keyword pair
    * @params [keyword, filenames]
    */
-  public static KeywordPairSet setup(String keyword, ArrayList<String> filenames) throws Exception {
+  public KeywordPairSet KwPairGen(String keyword, ArrayList<String> filenames) throws Exception {
     ArrayList<TSet> TSets = new ArrayList<>();
     ArrayList<String> XSets = new ArrayList<>();
     byte[] Ke = Common.PRF_F(MK.getKs(), keyword);
@@ -42,14 +45,14 @@ public class VEDB {
     Element wInv = w.duplicate().invert().getImmutable();
     byte[] stagw = Common.PRF_F(MK.getKs(), MK.getG1().getElement().duplicate().powZn(wInv));
 
-    int c = 0;
+    int c = 1;
     for (String ind : filenames) { //  ind - filename
       Element xInd = Common.PRF_Fp(MK.getKi(), ind);
       Element z = Common.PRF_Fp(MK.getKz(),
           MK.getG2().getElement().duplicate().powZn(wInv).toString() + c);
-      Element zInv = z.duplicate().invert();
       byte[] l = Common.PRF_F(stagw, c + "");
       byte[] e = Common.Enc(Ke, ind);
+      Element zInv = z.duplicate().invert();
       Element y = xInd.duplicate().mul(zInv);
 
       TSet tSet = new TSet(Arrays.toString(l), e, y, ind);
@@ -64,6 +67,9 @@ public class VEDB {
 
       ++c;
     }
+
+    // TODO: alg.1 line 16-17
+
     return new KeywordPairSet(TSets, XSets, stagw);
   }
 }

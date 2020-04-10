@@ -21,7 +21,9 @@ public class KeywordPairSet {
    * all XSet match single Keyword
    */
   private ArrayList<String> XSets;
-  //  Trapdoor of the given Keyword
+  /*
+   * Trapdoor of the given Keyword
+   */
   private byte[] stagw;
 
   public ArrayList<TSet> getTSets() {
