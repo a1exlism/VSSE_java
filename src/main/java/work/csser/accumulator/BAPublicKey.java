@@ -31,8 +31,9 @@ public class BAPublicKey implements Serializable {
   }
 
   /*
-   * TODO: Multi-user Public Key generation is related with `input set X upper bound`.
+   * TODO: q of ${pk}$: `input set X upper bound`(length).
    *  and should return a g^{k^i} set
+   * t in paper Wang.et.al
    */
   public static void generateKey(BAPrivateKey BAMK, int q) {
     Element g = BAMK.getG().getElement().duplicate();

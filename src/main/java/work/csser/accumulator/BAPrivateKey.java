@@ -18,7 +18,7 @@ public class BAPrivateKey implements Serializable {
 
   //  Generator of G
   private SerializableElement g;
-  //  trapdoor information \in Z_p^* OR the Secret key s
+  //  trapdoor information \in Z_p^* OR the `Secret key` k
   private SerializableElement k;
 
   public BAPrivateKey(SerializableElement g, SerializableElement k) {

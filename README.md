@@ -2,6 +2,8 @@
 
 verifiable searchable symmetric encryption (database
 
+OR VEDB
+
 ## Paper
 
 Towards Efficient Verifiable Conjunctive Keyword Search for Large Encrypted Database
@@ -69,7 +71,8 @@ Efficiency: sql 语句预处理 [sql prepared statement]
    - ${c}$ 是`级联`;
 6. [ ] ATTENTION 安全参数 ${\lambda}$ 应该是参考自[Supporting Non-membership Proofs with Bilinear-map Accumulators]
        同时需要更改 `PRF_F` 和 `PRF_Fp` 因为他们两个随机函数均参考 ${\lambda}$;
-7. [ ] 发现一个问题 ${t}$ 所代表的是每个 keyword 所对应的 documents 的数量, 也就是`不支持dynamic`操作.
+7. [ ] 创建 ${pk}$ 的变量 ${t}$ 所代表的`可能是`每个 keyword 所对应的 documents 的**最大**数量;
+8. [ ] accumulator map public key 我觉得更像是多用户处理, 暂时不太清楚 ${q}$ 这个是不是我理解的一样(根据数据拥有者给出的 x.length 决定);
 
 ### Alg.2 TokenGen
 
@@ -82,9 +85,11 @@ Efficiency: sql 语句预处理 [sql prepared statement]
 ### Bilinear Accumulators
 
 1. 代码中方案 BA public key 为了方便实现, 并没有采取每次进行`授权生成set`${\{g^{k^i}|0 \leqslant i \leqslant q\}}$ 的方案;
-   ATTENTION: 可能需要改进
+   ATTENTION: 需要改进
 
-2.
+2. 读论文的过程中发现 witness 原文写的和 non-witness 完全一致暂时剔除仅保留 non-witness;
+
+3. [ ] Non-Witness verification 的判断条件与原文内容不同, 需要讨论;
 
 ### DB
 
