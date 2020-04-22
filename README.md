@@ -91,6 +91,8 @@ Efficiency: sql 语句预处理 [sql prepared statement]
 
 3. [ ] Non-Witness verification 的判断条件与原文内容不同, 需要讨论;
 
+4. 由于 Witness 和 Non-Witness 基础类一样, 所以统一类`Witness`;
+
 ### DB
 
 1. [ ] insertKeyPairSet

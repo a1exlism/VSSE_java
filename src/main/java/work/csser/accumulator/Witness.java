@@ -16,7 +16,7 @@ public class Witness implements Serializable {
   private SerializableElement Uy;
   private SerializableElement Wy;
 
-  public Witness(SerializableElement Uy, SerializableElement Wy) {
+  public Witness(SerializableElement Wy, SerializableElement Uy) {
     this.Uy = Uy;
     this.Wy = Wy;
   }
