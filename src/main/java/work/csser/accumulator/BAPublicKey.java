@@ -5,7 +5,6 @@ import work.csser.utils.SerializableElement;
 import work.csser.utils.SerializationDemonstrator;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
@@ -39,6 +38,7 @@ public class BAPublicKey implements Serializable {
     Element g = BAMK.getG().getElement().duplicate();
     Element k = BAMK.getK().getElement().duplicate();
 
+    //  ATTENTION: Public Key also get the `g` value
     ArrayList<SerializableElement> pk = new ArrayList<>();
     for (int i = 0; i < q + 1; ++i) {
       Element expK = k.duplicate().pow(new BigInteger(i + ""));

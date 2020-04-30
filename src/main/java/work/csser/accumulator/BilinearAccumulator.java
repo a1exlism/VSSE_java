@@ -45,14 +45,27 @@ public class BilinearAccumulator implements Serializable {
     return Y;
   }
 
+  /**
+   * @param x: string
+   * @return it.unisa.dia.gas.jpbc.Element
+   * @description transfer String into Element
+   * @method str2Ele
+   * @params [x]
+   */
+  private static Element str2Ele(String x) {
+    return pairing.getZr().newElementFromHash(
+        x.getBytes(StandardCharsets.UTF_8), 0, x.getBytes(StandardCharsets.UTF_8).length
+    );
+  }
+
+  //  Acc(S) = A_k(X) = g^{\Pi_{i=1}^{N} x_i+s} = g^{f_X(k)}
   public BilinearAccumulator(List<String> Y) {
     this.Y = Y;
     this.X = new ArrayList<SerializableElement>();
     //  initial a identity element
     Element product = pairing.getZr().newOneElement();
     for (String y : Y) {
-      Element x = pairing.getZr().newElementFromHash(
-          y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length);
+      Element x = str2Ele(y);
       X.add(new SerializableElement(x));
       product.mul(x.duplicate().add(BAMK.getK().getElement()));
     }
@@ -61,54 +74,38 @@ public class BilinearAccumulator implements Serializable {
   }
 
   /**
-   * @param Y1: Subset S_1
+   * @param x: verify Element x
    * @return work.csser.accumulator.Witness
-   * @method getSubsetWitness
-   * @params [Y1]
+   * @method getWitness
+   * @params [x]
    */
-  private Witness getSubsetWitness(List<String> Y1) {
-    //  LeftSet \in S-S_1(Y-Y_1)
-    List<String> leftSet = new ArrayList<>(Y);
-    leftSet.removeAll(Y1);
-    Element expS = pairing.getZr().newOneElement();
-    Element expS1 = pairing.getZr().newOneElement();
-    Element s = BAMK.getK().getElement().duplicate();
-    Element g = BAMK.getG().getElement().duplicate();
-    for (String y : leftSet) {
-      Element yE = pairing.getZr().newElementFromHash(
-          y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length);
-      expS = expS.duplicate().mul(yE.add(s));
-    }
-    //  subset S_1
-    for (String y : Y1) {
-      Element yE = pairing.getZr().newElementFromHash(
-          y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length);
-      expS1 = expS1.duplicate().mul(yE.add(s));
-    }
-    Element W_Subset = g.powZn(expS);
-    Element U_Subset = g.powZn(expS1);
-    //  BETTER: U_Subset 可以不计算
-    return new Witness(new SerializableElement(W_Subset), new SerializableElement(U_Subset));
+  private Witness getWitness(Element x) {
+    Element g = BAMK.getG().getElement().getImmutable();
+    Element k = BAMK.getK().getElement().getImmutable();
+    Element exp = fXk.getElement().duplicate().div(x.duplicate().add(k));
+    Element Wx = g.powZn(exp);
+    return new Witness(new SerializableElement(Wx), null);
+  }
+
+  public Witness getElementWitness(String y) throws Exception {
+    return this.getWitness(str2Ele(y));
   }
 
   /**
-   * @param Y1:            subset raw input S_1
-   * @param subsetWitness: W_{S_1,S} subset witness
-   * @return boolean is S_1(Y1) belong to S(Y)
-   * @method verifySubsetWitness
-   * @params [Y1, subsetWitness]
+   * @param x:       detect value x
+   * @param witness: witness for x \in X
+   * @return boolean
+   * @method verifyWitness
+   * @params [x, witness]
    */
-  public boolean verifySubsetWitness(List<String> Y1, Witness subsetWitness) {
-    Element expS1 = pairing.getZr().newOneElement();
-    Element s = BAMK.getK().getElement().duplicate();
-    Element g = BAMK.getG().getElement().duplicate();
-    for (String y : Y1) {
-      Element yE = pairing.getZr().newElementFromHash(
-          y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length);
-      expS1 = expS1.duplicate().mul(yE.add(s));
-    }
-    Element U_Subset = g.powZn(expS1);
-    Element e1 = pairing.pairing(subsetWitness.getWy().getElement(), U_Subset);
+  private boolean verifyWitness(Element x, Witness witness) {
+    //  g = g^{k^0}
+    Element g = BAPK.getPk().get(0).getElement().getImmutable();
+    //  h = g^{k^1}
+    Element h = BAPK.getPk().get(1).getElement().getImmutable();
+    Element Wx = witness.getWy().getElement().duplicate();
+    Element RE = g.powZn(x).mul(h);
+    Element e1 = pairing.pairing(Wx, RE);
     Element e2 = pairing.pairing(AkX.getElement(), g);
     return e1.isEqual(e2);
   }
@@ -142,10 +139,7 @@ public class BilinearAccumulator implements Serializable {
    * @params [y]
    */
   public Witness getElementNonWitness(String y) throws Exception {
-    Element e = pairing.getZr().newElementFromHash(
-        y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length
-    );
-    return this.getNonWitness(e);
+    return this.getNonWitness(str2Ele(y));
   }
 
 
@@ -160,17 +154,16 @@ public class BilinearAccumulator implements Serializable {
    * @params [y, nonWitness]
    */
   public boolean verifyNonWitness(String y, Witness nonWitness) {
-    Element Ey = pairing.getZr().newElementFromHash(
-        y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length);
+//    Element Ey = pairing.getZr().newElementFromHash(y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length);
+    Element Ey = str2Ele(y);
     //  Exponentiation - base: g
     Element g = ((SerializableElement) BAPK.getPk().get(0)).getElement().duplicate();
     //  publicly known group element : h=g^{\kappa}
     Element h = ((SerializableElement) BAPK.getPk().get(1)).getElement().duplicate();
     Element Wy = nonWitness.getWy().getElement().duplicate();
     Element Uy = nonWitness.getUy().getElement().duplicate();
-    Element rightE =
-        g.duplicate().powZn(Ey).duplicate()
-            .mul(h.duplicate());
+    Element rightE = g.duplicate().powZn(Ey).duplicate()
+        .mul(h.duplicate());
     //  1: left pairing; 2: right pairing
     Element e1 = pairing.pairing(Wy, rightE);
     Element e2 = pairing.pairing(this.AkX.getElement(), g);
@@ -178,4 +171,53 @@ public class BilinearAccumulator implements Serializable {
     return e1.isEqual(e2) && !Uy.isEqual(pairing.getZr().newZeroElement());
   }
 
+  /**
+   * @param Y1: Subset S_1
+   * @return work.csser.accumulator.Witness
+   * @method getSubsetWitness
+   * @scheme Wang Scheme
+   * @params [Y1]
+   */
+  private Witness getSubsetWitness(List<String> Y1) {
+    //  LeftSet \in S-S_1(Y-Y_1)
+    List<String> leftSet = new ArrayList<>(Y);
+    leftSet.removeAll(Y1);
+    Element expS = pairing.getZr().newOneElement();
+    Element expS1 = pairing.getZr().newOneElement();
+    Element s = BAMK.getK().getElement().duplicate();
+    Element g = BAMK.getG().getElement().duplicate();
+    for (String y : leftSet) {
+      Element yE = str2Ele(y);
+      expS = expS.duplicate().mul(yE.add(s));
+    }
+
+    Element W_Subset = g.powZn(expS);
+    //  U_Subset 不需要计算, verify需要用检测的subset进行计算
+    return new Witness(new SerializableElement(W_Subset), null);
+  }
+
+  /**
+   * @param Y1:            subset raw input S_1
+   * @param subsetWitness: W_{S_1,S} subset witness
+   * @return boolean is S_1(Y1) belong to S(Y)
+   * @method verifySubsetWitness
+   * @params [Y1, subsetWitness]
+   * @scheme Wang Scheme
+   */
+  public boolean verifySubsetWitness(List<String> Y1, Witness subsetWitness) {
+    Element expS1 = pairing.getZr().newOneElement();
+    Element s = BAMK.getK().getElement().getImmutable();
+    Element g = BAMK.getG().getElement().getImmutable();
+    //  subset S_1
+    for (String y : Y1) {
+      Element yE = str2Ele(y);
+      expS1 = expS1.duplicate().mul(yE.add(s));
+    }
+    Element U_Subset = g.powZn(expS1);
+    Element e1 = pairing.pairing(subsetWitness.getWy().getElement(), U_Subset);
+    Element e2 = pairing.pairing(AkX.getElement(), g);
+    return e1.isEqual(e2);
+  }
+
+  //  TODO: add subset Non-Witness
 }
