@@ -3,7 +3,6 @@ package work.csser.db;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
-import work.csser.utils.SerializableElement;
 
 import java.io.FileNotFoundException;
 import java.sql.*;
@@ -18,7 +17,6 @@ import java.util.Arrays;
 public class DBModule {
   private static Connection conn;
   private static PreparedStatement pres;
-//  private BloomFilter
 
   static {
     try {
@@ -79,7 +77,7 @@ public class DBModule {
   }
 
   /**
-   * Reserved | insert tables with other tableNames
+   * Reserved | insert tables with specific tables
    *
    * @param kps:         keyword pair set
    * @param tableTSets:
@@ -89,51 +87,50 @@ public class DBModule {
    * @method insertKeyPairSet
    * @params [kps, tableTSets, tableXSets, tableStagws]
    */
-//  public void insertKeyPairSet(KeywordPairSet kps, String tableTSets, String tableXSets, String tableStagws) throws SQLException {
-//    /*
-//     * TSet insert
-//     * */
-//    ArrayList<TSet> TSets = kps.getTSets();
-//    String insertTSets = "INSERT INTO " + tableTSets + "(label,e,y,keyword) values (?,?,?,?)";
-//    pres = conn.prepareStatement(insertTSets);
-//    for (TSet ts : TSets) {
-//      pres.setString(1, ts.getL());
-//      pres.setBytes(2, ts.getE());
-//      pres.setBytes(3, ts.getY().getElement().duplicate().toBytes());
-//      pres.setString(4, ts.getKeyword());
-//      //  insert into queue
-//      pres.addBatch();
-//    }
-//    pres.executeBatch();
-//    /*
-//     * XSet insert
-//     * */
-//    ArrayList<String> XSets = kps.getXSets();
-//    String insertXSets = "INSERT INTO " + tableXSets + "(xSet) VALUE (?)";
-//    pres = conn.prepareStatement(insertXSets);
-//    for (String xs : XSets) {
-//      pres.setString(1, xs);
-//      pres.addBatch();
-//    }
-//    pres.executeBatch();
-//    /*
-//     * stagws insert
-//     * */
-//    byte[] stag = kps.getStagw();
-//    String insertStagws = "INSERT INTO " + tableStagws + "(stagw) VALUE (?)";
-//    pres = conn.prepareStatement(insertStagws);
-//    pres.setString(1, Arrays.toString(stag));
-//    pres.execute();
-//
-//    //  Close pre-statement
-//    pres.close();
-//  }
+  public void insertKeyPairSet(KeywordPairSet kps, String tableTSets, String tableXSets, String tableStagws) throws SQLException {
+    /*
+     * TSet insert
+     * */
+    ArrayList<TSet> TSets = kps.getTSets();
+    String insertTSets = "INSERT INTO " + tableTSets + "(label,e,y,keyword) values (?,?,?,?)";
+    pres = conn.prepareStatement(insertTSets);
+    for (TSet ts : TSets) {
+      pres.setString(1, ts.getL());
+      pres.setBytes(2, ts.getE());
+      pres.setBytes(3, ts.getY().getElement().duplicate().toBytes());
+      pres.setString(4, ts.getKeyword());
+      //  insert into queue
+      pres.addBatch();
+    }
+    pres.executeBatch();
+    /*
+     * XSet insert
+     * */
+    ArrayList<String> XSets = kps.getXSets();
+    String insertXSets = "INSERT INTO " + tableXSets + "(xSet) VALUE (?)";
+    pres = conn.prepareStatement(insertXSets);
+    for (String xs : XSets) {
+      pres.setString(1, xs);
+      pres.addBatch();
+    }
+    pres.executeBatch();
+    /*
+     * stagws insert
+     * */
+    byte[] stag = kps.getStagw();
+    String insertStagws = "INSERT INTO " + tableStagws + "(stagw) VALUE (?)";
+    pres = conn.prepareStatement(insertStagws);
+    pres.setString(1, Arrays.toString(stag));
+    pres.execute();
+
+    //  Close pre-statement
+    pres.close();
+  }
 
   /**
-   * Select query with TSet label
-   *
    * @param label:
    * @return work.csser.db.TSet
+   * @description TSet SQL query with default DB table
    * @method getTSet
    * @params [label]
    */
@@ -160,38 +157,38 @@ public class DBModule {
   }
 
   /**
-   * select query TSet with label | table specific version
-   *
    * @param label:
-   * @param tableTSet:
+   * @param tableName:
    * @return work.csser.db.TSet
+   * @description TSet SQL query with specific table in DB
    * @method getTSet
-   * @params [label, tableTSet]
+   * @params [label, tableName]
    */
-//  public static TSet getTSet(String label, String tableTSet) throws SQLException {
-//    Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
-//
-//    TSet ts = null;
-//    String queryStr = "SELECT * FROM " + tableTSet + " WHERE label=(?) LIMIT 1";
-//    pres = conn.prepareStatement(queryStr);
-//    pres.setString(1, label);
-//    ResultSet res = pres.executeQuery();
-//    Element ele = pairing.getZr().newElement();
-//    while (res.next()) {
-//      String l = res.getString(1);
-//      byte[] e = res.getBytes(2);
-//      Element y = ele.duplicate();
-//      y.setFromBytes(res.getBytes(3));
-//      String keyword = res.getString(4);
-//      ts = new TSet(l, e, y, keyword);
-//    }
-//
-//    pres.close();
-//    return ts;
-//  }
+  public static TSet getTSet(String label, String tableName) throws SQLException {
+    Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
+
+    TSet ts = null;
+    String queryStr = "SELECT * FROM (?) WHERE label=(?) LIMIT 1";
+    pres = conn.prepareStatement(queryStr);
+    pres.setString(1, tableName);
+    pres.setString(2, label);
+    ResultSet res = pres.executeQuery();
+    Element ele = pairing.getZr().newElement();
+    while (res.next()) {
+      String l = res.getString(1);
+      byte[] e = res.getBytes(2);
+      Element y = ele.duplicate();
+      y.setFromBytes(res.getBytes(3));
+      String keyword = res.getString(4);
+      ts = new TSet(l, e, y, keyword);
+    }
+
+    pres.close();
+    return ts;
+  }
 
   /**
-   * check whether xs in XSets
+   * Legacy: check whether xs in XSets with Normal Method
    *
    * @param xs: XSet (single)
    * @return boolean
@@ -221,10 +218,10 @@ public class DBModule {
    * @param offset: start index
    * @param num:    select numbers
    * @return java.util.ArrayList<java.lang.String>
-   * @method selectXSets
+   * @method getXSets
    * @params [offset, count]
    */
-  public static ArrayList<String> selectXSets(int offset, int num) throws SQLException {
+  public static ArrayList<String> getXSets(int offset, int num) throws SQLException {
     ArrayList<String> XSets = new ArrayList<>();
     String sqlSelect = "SELECT * FROM XSets LIMIT " + offset + "," + num;
     pres = conn.prepareStatement(sqlSelect);
@@ -243,10 +240,10 @@ public class DBModule {
    * @param offset: start index
    * @param num:    select numbers
    * @return java.util.ArrayList<java.lang.String>
-   * @method selectStagws
+   * @method getStagws
    * @params [offset, count]
    */
-  public static ArrayList<String> selectStagws(int offset, int num) throws SQLException {
+  public static ArrayList<String> getStagws(int offset, int num) throws SQLException {
     ArrayList<String> stagws = new ArrayList<>();
     String sqlSelect = "SELECT * FROM stagws LIMIT " + offset + "," + num;
     pres = conn.prepareStatement(sqlSelect);
