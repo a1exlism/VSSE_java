@@ -40,7 +40,7 @@ public class BloomFilterUtil {
     int step = 5000;
     while (offset < expectedElements) {
       System.out.println(offset + "~" + (offset + step));
-      ArrayList<String> XSets = DBModule.selectXSets(offset, step);
+      ArrayList<String> XSets = DBModule.getXSets(offset, step);
       for (String xs : XSets) {
         bf.add(xs.getBytes(StandardCharsets.UTF_8));
       }
@@ -70,7 +70,7 @@ public class BloomFilterUtil {
     int step = 5000;
     while (offset < expectedElements) {
       System.out.println(offset + "~" + (offset + step));
-      ArrayList<String> XSets = DBModule.selectXSets(offset, step);
+      ArrayList<String> XSets = DBModule.getXSets(offset, step);
       for (String xs : XSets) {
         bf.add(xs.getBytes(StandardCharsets.UTF_8));
       }

@@ -130,7 +130,7 @@ public class DBModule {
   /**
    * @param label:
    * @return work.csser.db.TSet
-   * @description TSet SQL query with default DB table
+   * @description TSet SQL query by `label` key value with default DB table
    * @method getTSet
    * @params [label]
    */
@@ -189,6 +189,7 @@ public class DBModule {
 
   /**
    * Legacy: check whether xs in XSets with Normal Method
+   * isInXSets BloomFilter Version in class <BloomFilterUtil>
    *
    * @param xs: XSet (single)
    * @return boolean
@@ -208,10 +209,6 @@ public class DBModule {
     return count > 0;
   }
 
-  /**
-   * TODO create isInXSetsBF with BloomFilter
-   *  public static boolean isInXSets(String xs) throws SQLException
-   */
   /**
    * get `count` numbers XSets from DB
    *

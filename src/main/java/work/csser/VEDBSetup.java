@@ -67,7 +67,8 @@ public class VEDBSetup {
 
       ++c;
     }
-
+    //  line 15-17
+    byte[] l = Common.PRF_F(stagw, "0");
     // TODO: alg.1 line 16-17
 
     return new KeywordPairSet(TSets, XSets, stagw);

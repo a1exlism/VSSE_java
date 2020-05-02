@@ -19,11 +19,6 @@ import java.util.ArrayList;
  * @since 2020/1/3 10:57
  */
 public class SearchToken {
-  // initial environment
-  private static Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
-  private static MasterKey mk = MasterKey.readKey();
-  private static PublicKey pk = PublicKey.readKey();
-
   //  1st keyword w_1 query trapdoor
   private byte[] stag = null;
   private Element[][] xToken = null;
@@ -50,6 +45,10 @@ public class SearchToken {
    * @params [keyword]
    */
   private static byte[] stagGen(String keyword) throws UnsupportedEncodingException {
+    // initial environment
+    Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
+    MasterKey mk = MasterKey.readKey();
+
     Element g1 = mk.getG1().getElement().getImmutable();
     Element w1 = pairing.getZr().newElement();
     w1.setFromBytes(keyword.getBytes(StandardCharsets.UTF_8));
@@ -61,12 +60,17 @@ public class SearchToken {
    * create authenticated search token for search
    *
    * @param kws: all search keywords
-   * @param lfc: least frequency keyword file count
+   * @param lfc: least frequency keyword file count, default with keyword w_1
    * @return work.csser.SearchToken
    * @method TokenGen
    * @params [kws, lfc]
    */
   public static SearchToken TokenGen(ArrayList<String> kws, int lfc) throws Exception {
+    // initial environment
+    Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
+    MasterKey mk = MasterKey.readKey();
+    PublicKey pk = PublicKey.readKey();
+
     // sterm: the least frequent keyword in a given search query (assume w_1)
     String sterm = kws.get(0);
     byte[] stag = stagGen(sterm);

@@ -82,6 +82,11 @@ Efficiency: sql 语句预处理 [sql prepared statement]
         BETTER flexible 的方式可以在 Setup 的过程中 data owner 创建每个 keyword(encrypted)和其对应的文件数量, 到时候直接查询即可减少大量的循环.
 4. [ ] line-5 g^exp 需要 pow 还是 powZn(jpbc)?
 
+### Alg.3 Search
+
+1. [ ] line-2: 没有做, 与Setup一样, 不知道这个有何作用;
+2. 
+
 ### Bilinear Accumulators
 
 1. 代码中方案 BA public key 为了方便实现, 并没有采取每次进行`授权生成set`${\{g^{k^i}|0 \leqslant i \leqslant q\}}$ 的方案;
