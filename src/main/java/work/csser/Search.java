@@ -1,11 +1,10 @@
 package work.csser;
 
-import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import work.csser.Init.MasterKey;
 import work.csser.Init.PublicKey;
-import work.csser.accumulator.Witness;
+import work.csser.BMAccumulator.Witness;
 import work.csser.db.DBModule;
 import work.csser.db.TSet;
 import work.csser.utils.Common;
@@ -64,10 +63,12 @@ public class Search {
     }
     if (Rw1.isEmpty()) {
       //  Case 1
+      return null;
     }
     /*
      * Phase.2
      */
+    return null;
   }
 
 }

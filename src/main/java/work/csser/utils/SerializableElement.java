@@ -9,14 +9,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * <br> len(x \in Z_r) = 20
- * <br> len(x \in G_1) = 128
- * <br> len(x \in G_2) = 128
+ * <br> len(x \in G_1/G_2) = 128
  * <br> len(x \in G_T) = 128
- * <br> Can't detect whether element belong to G_1/2 or G_T
+ * <br> Can't detect whether element belong to G_1/2 or G_T by byte length
  *
  * @author a1exlism
  * @refer /test/../utils/PairingElementTest.lengthTest

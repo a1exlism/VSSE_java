@@ -1,4 +1,4 @@
-package work.csser.accumulator;
+package work.csser.BMAccumulator;
 
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
@@ -17,17 +17,17 @@ import java.util.List;
  * @className BilinearAccumulator
  * @since 2020/4/9 14:11
  */
-public class BilinearAccumulator implements Serializable {
+public class Accumulator implements Serializable {
 
   private static final long serialVersionUID = -8967716927815684208L;
-  private static BAPrivateKey BAMK;
-  private static BAPublicKey BAPK;
+  private static BMAPrivateKey BMAMK;
+  private static BMAPublicKey BMAPK;
   private static Pairing pairing;
 
   //  initial
   static {
-    BAMK = BAPrivateKey.readKey();
-    BAPK = BAPublicKey.readKey();
+    BMAMK = BMAPrivateKey.readKey();
+    BMAPK = BMAPublicKey.readKey();
     pairing = PairingFactory.getPairing("params/curves/a.properties");
   }
 
@@ -46,31 +46,31 @@ public class BilinearAccumulator implements Serializable {
   }
 
   /**
-   * @param x: string
+   * @param s: string
    * @return it.unisa.dia.gas.jpbc.Element
    * @description transfer String into Element
    * @method str2Ele
    * @params [x]
    */
-  private static Element str2Ele(String x) {
+  private static Element str2Ele(String s) {
     return pairing.getZr().newElementFromHash(
-        x.getBytes(StandardCharsets.UTF_8), 0, x.getBytes(StandardCharsets.UTF_8).length
+        s.getBytes(StandardCharsets.UTF_8), 0, s.getBytes(StandardCharsets.UTF_8).length
     );
   }
 
   //  Acc(S) = A_k(X) = g^{\Pi_{i=1}^{N} x_i+s} = g^{f_X(k)}
-  public BilinearAccumulator(List<String> Y) {
-    this.Y = Y;
-    this.X = new ArrayList<SerializableElement>();
+  public Accumulator(List<String> S) {
+    this.Y = S;
+    this.X = new ArrayList<>();
     //  initial a identity element
     Element product = pairing.getZr().newOneElement();
-    for (String y : Y) {
-      Element x = str2Ele(y);
+    for (String s : S) {
+      Element x = str2Ele(s);
       X.add(new SerializableElement(x));
-      product.mul(x.duplicate().add(BAMK.getK().getElement()));
+      product.mul(x.duplicate().add(BMAMK.getK().getElement()));
     }
     fXk = new SerializableElement(product);
-    AkX = new SerializableElement(BAMK.getG().getElement().duplicate().powZn(product));
+    AkX = new SerializableElement(BMAMK.getG().getElement().duplicate().powZn(product));
   }
 
   /**
@@ -80,29 +80,31 @@ public class BilinearAccumulator implements Serializable {
    * @params [x]
    */
   private Witness getWitness(Element x) {
-    Element g = BAMK.getG().getElement().getImmutable();
-    Element k = BAMK.getK().getElement().getImmutable();
+    Element g = BMAMK.getG().getElement().getImmutable();
+    Element k = BMAMK.getK().getElement().getImmutable();
+    // ATTENTION fXk unknown
     Element exp = fXk.getElement().duplicate().div(x.duplicate().add(k));
     Element Wx = g.powZn(exp);
     return new Witness(new SerializableElement(Wx), null);
   }
 
-  public Witness getElementWitness(String y) throws Exception {
-    return this.getWitness(str2Ele(y));
+  public Witness getElementWitness(String x) {
+    return this.getWitness(str2Ele(x));
   }
 
   /**
-   * @param x:       detect value x
+   * @param sx:      detect value sx
    * @param witness: witness for x \in X
    * @return boolean
    * @method verifyWitness
    * @params [x, witness]
    */
-  private boolean verifyWitness(Element x, Witness witness) {
+  public boolean verifyWitness(String sx, Witness witness) {
+    Element x = str2Ele(sx);
     //  g = g^{k^0}
-    Element g = BAPK.getPk().get(0).getElement().getImmutable();
+    Element g = BMAPK.getPk().get(0).getElement().getImmutable();
     //  h = g^{k^1}
-    Element h = BAPK.getPk().get(1).getElement().getImmutable();
+    Element h = BMAPK.getPk().get(1).getElement().getImmutable();
     Element Wx = witness.getWy().getElement().duplicate();
     Element RE = g.powZn(x).mul(h);
     Element e1 = pairing.pairing(Wx, RE);
@@ -127,8 +129,8 @@ public class BilinearAccumulator implements Serializable {
     }
     Element Uy = product.duplicate().negate();
     Element exp = fXk.getElement().duplicate().add(Uy);
-    exp.div(y.duplicate().add(BAMK.getK().getElement()));
-    Element Wy = BAMK.getG().getElement().duplicate().powZn(exp);
+    exp.div(y.duplicate().add(BMAMK.getK().getElement()));
+    Element Wy = BMAMK.getG().getElement().duplicate().powZn(exp);
     return new Witness(new SerializableElement(Wy), new SerializableElement(Uy));
   }
 
@@ -138,7 +140,7 @@ public class BilinearAccumulator implements Serializable {
    * @method getElementNonWitness
    * @params [y]
    */
-  public Witness getElementNonWitness(String y) throws Exception {
+  public Witness getElementNonWitness(String y) {
     return this.getNonWitness(str2Ele(y));
   }
 
@@ -157,9 +159,9 @@ public class BilinearAccumulator implements Serializable {
 //    Element Ey = pairing.getZr().newElementFromHash(y.getBytes(StandardCharsets.UTF_8), 0, y.getBytes(StandardCharsets.UTF_8).length);
     Element Ey = str2Ele(y);
     //  Exponentiation - base: g
-    Element g = ((SerializableElement) BAPK.getPk().get(0)).getElement().duplicate();
+    Element g = ((SerializableElement) BMAPK.getPk().get(0)).getElement().duplicate();
     //  publicly known group element : h=g^{\kappa}
-    Element h = ((SerializableElement) BAPK.getPk().get(1)).getElement().duplicate();
+    Element h = ((SerializableElement) BMAPK.getPk().get(1)).getElement().duplicate();
     Element Wy = nonWitness.getWy().getElement().duplicate();
     Element Uy = nonWitness.getUy().getElement().duplicate();
     Element rightE = g.duplicate().powZn(Ey).duplicate()
@@ -184,8 +186,8 @@ public class BilinearAccumulator implements Serializable {
     leftSet.removeAll(Y1);
     Element expS = pairing.getZr().newOneElement();
     Element expS1 = pairing.getZr().newOneElement();
-    Element s = BAMK.getK().getElement().duplicate();
-    Element g = BAMK.getG().getElement().duplicate();
+    Element s = BMAMK.getK().getElement().duplicate();
+    Element g = BMAMK.getG().getElement().duplicate();
     for (String y : leftSet) {
       Element yE = str2Ele(y);
       expS = expS.duplicate().mul(yE.add(s));
@@ -206,8 +208,8 @@ public class BilinearAccumulator implements Serializable {
    */
   public boolean verifySubsetWitness(List<String> Y1, Witness subsetWitness) {
     Element expS1 = pairing.getZr().newOneElement();
-    Element s = BAMK.getK().getElement().getImmutable();
-    Element g = BAMK.getG().getElement().getImmutable();
+    Element s = BMAMK.getK().getElement().getImmutable();
+    Element g = BMAMK.getG().getElement().getImmutable();
     //  subset S_1
     for (String y : Y1) {
       Element yE = str2Ele(y);

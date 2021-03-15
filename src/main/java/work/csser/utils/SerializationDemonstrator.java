@@ -1,8 +1,5 @@
 package work.csser.utils;
 
-
-import static java.lang.System.out;
-
 import java.io.*;
 
 /**
@@ -10,7 +7,6 @@ import java.io.*;
  * @className SerializationDemonstrator
  * @description Simple serialization/deserialization demonstrator.
  * Working in workspace user.dir
- *
  * @link http://marxsoftware.blogspot.com/2014/02/serializing-java-objects-with-non.html
  * @link2 https://stackoverflow.com/questions/9620683/java-fileoutputstream-create-file-if-not-exists
  */

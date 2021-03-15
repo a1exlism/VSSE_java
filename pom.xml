@@ -24,31 +24,31 @@
                 <version>2.5.2</version>
                 <executions>
                     <execution>
-                        <id>install-jpbc</id>
+                        <phase>initialize</phase>
+                        <id>install-jpbc-api</id>
                         <goals>
                             <goal>install-file</goal>
                         </goals>
-                        <phase>clean</phase>
                         <configuration>
+                            <file>lib/jpbc-api-2.0.0.jar</file>
                             <groupId>it.unisa.dia.gas</groupId>
-                            <artifactId>jpbc</artifactId>
+                            <artifactId>jpbc-api</artifactId>
                             <version>2.0.0</version>
                             <packaging>jar</packaging>
-                            <file>libs/jpbc-api-2.0.0.jar</file>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>install-plaf</id>
+                        <phase>initialize</phase>
+                        <id>install-jpbc-plaf</id>
                         <goals>
                             <goal>install-file</goal>
                         </goals>
-                        <phase>clean</phase>
                         <configuration>
+                            <file>lib/jpbc-plaf-2.0.0.jar</file>
                             <groupId>it.unisa.dia.gas.plaf</groupId>
-                            <artifactId>jpbc</artifactId>
+                            <artifactId>jpbc-plaf</artifactId>
                             <version>2.0.0</version>
                             <packaging>jar</packaging>
-                            <file>libs/jpbc-plaf-2.0.0.jar</file>
                         </configuration>
                     </execution>
                 </executions>
@@ -94,6 +94,16 @@
             <groupId>com.github.alexandrnikitin</groupId>
             <artifactId>bloom-filter_2.12</artifactId>
             <version>0.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>it.unisa.dia.gas</groupId>
+            <artifactId>jpbc-api</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>it.unisa.dia.gas</groupId>
+            <artifactId>jpbc-plaf</artifactId>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
 </project>

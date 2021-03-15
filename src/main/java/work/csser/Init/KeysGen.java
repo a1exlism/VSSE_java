@@ -1,8 +1,8 @@
 package work.csser.Init;
 
 
-import work.csser.accumulator.BAPrivateKey;
-import work.csser.accumulator.BAPublicKey;
+import work.csser.BMAccumulator.BMAPrivateKey;
+import work.csser.BMAccumulator.BMAPublicKey;
 
 /**
  * @author a1exlism
@@ -11,7 +11,6 @@ import work.csser.accumulator.BAPublicKey;
  * @since 2020/4/10 14:55
  */
 public class KeysGen {
-  //  TODO: 弄清楚 t 和 q 分别代表什么
   public static void main(String[] args) {
 
 //    Master and Public
@@ -23,14 +22,14 @@ public class KeysGen {
 
     BAKeyGen();
 
-    System.out.println("Accumulator keys generated. with prefix `BA_`");
+    System.out.println("Accumulator keys generated. with prefix `BMA_`");
   }
 
   //    Bilinear Map Accumulator Master and Public
   public static void BAKeyGen() {
-    BAPrivateKey.generateKey();
-    BAPrivateKey BAMK = BAPrivateKey.readKey();
+    BMAPrivateKey.generateKey();
+    BMAPrivateKey BMAMK = BMAPrivateKey.readKey();
     //  TODO: temporary set q = 100(keyword: ids num)
-    BAPublicKey.generateKey(BAMK, 100);
+    BMAPublicKey.generateKey(BMAMK, 100);
   }
 }

@@ -41,7 +41,7 @@ public class PublicKey implements Serializable {
    *
    * @param MK: master key MK
    * @param t:  upper bound on the number of the cardinality(by Paper
-   *         maybe means 'the MAX number of documents associated keyword in Setup'
+   *            maybe means 'the MAX number of documents associated keyword in Setup'
    * @return void
    * @method generateKey
    * @params [MK, t]
@@ -77,7 +77,6 @@ public class PublicKey implements Serializable {
     sb.append(System.lineSeparator());
     sb.append("g: ").append(g.getElement().toString());
     sb.append(System.lineSeparator());
-//    sb.append("聚合器的公钥：");
     sb.append("Public key of Accumulator: ");
     sb.append(System.lineSeparator());
     for (int i = 0; i < pk.size(); i++) {

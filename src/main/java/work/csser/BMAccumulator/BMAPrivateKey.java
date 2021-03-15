@@ -1,4 +1,4 @@
-package work.csser.accumulator;
+package work.csser.BMAccumulator;
 
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @className BAPrivateKey
  * @since 2020/4/9 15:54
  */
-public class BAPrivateKey implements Serializable {
+public class BMAPrivateKey implements Serializable {
 
   private static final long serialVersionUID = -8618975498800886975L;
 
@@ -21,25 +21,26 @@ public class BAPrivateKey implements Serializable {
   //  trapdoor information \in Z_p^* OR the `Secret key` k
   private SerializableElement k;
 
-  public BAPrivateKey(SerializableElement g, SerializableElement k) {
+  public BMAPrivateKey(SerializableElement g, SerializableElement k) {
     this.g = g;
     this.k = k;
   }
 
-  public static void generateKey() {
+  public static BMAPrivateKey generateKey() {
     Pairing pairing = PairingFactory.getPairing("params/curves/a.properties");
 
     SerializableElement g = new SerializableElement(pairing.getG1().newRandomElement());
     SerializableElement k = new SerializableElement(pairing.getZr().newRandomElement());
 
-    BAPrivateKey BAMK = new BAPrivateKey(g, k);
+    BMAPrivateKey BMAMK = new BMAPrivateKey(g, k);
 
-    SerializationDemonstrator.serialize(BAMK, "keys", "BA_private.key");
+    SerializationDemonstrator.serialize(BMAMK, "keys", "BMA_private.key");
 
+    return BMAMK;
   }
 
-  public static BAPrivateKey readKey() {
-    return SerializationDemonstrator.deserialize("keys", "BA_private.key");
+  public static BMAPrivateKey readKey() {
+    return SerializationDemonstrator.deserialize("keys", "BMA_private.key");
   }
 
   public SerializableElement getG() {

@@ -1,11 +1,7 @@
 package work.csser;
 
-import work.csser.accumulator.BilinearAccumulator;
-import work.csser.accumulator.Witness;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import work.csser.BMAccumulator.Accumulator;
+import work.csser.BMAccumulator.Witness;
 
 
 /**
@@ -19,12 +15,12 @@ public class Proof {
   private int CASE;
   private Witness proof1;
   private Witness proof2;
-  private BilinearAccumulator accStag;
-  private BilinearAccumulator accXSet;
+  private Accumulator accStag;
+  private Accumulator accXSet;
   private String stagw1;
 
   public Proof(Witness proof1, Witness proof2,
-               BilinearAccumulator accStag, BilinearAccumulator accXSet) {
+               Accumulator accStag, Accumulator accXSet) {
     this.proof1 = proof1;
     this.proof2 = proof2;
     this.accStag = accStag;
@@ -51,11 +47,11 @@ public class Proof {
     return proof2;
   }
 
-  public BilinearAccumulator getAccStag() {
+  public Accumulator getAccStag() {
     return accStag;
   }
 
-  public BilinearAccumulator getAccXSet() {
+  public Accumulator getAccXSet() {
     return accXSet;
   }
 

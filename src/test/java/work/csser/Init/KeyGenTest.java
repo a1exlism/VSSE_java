@@ -33,6 +33,9 @@ public class KeyGenTest {
 
   @Test
   public void Immutable() {
+    /*
+     * TODO: move to JPBC test
+     *  */
     MasterKey MK = MasterKey.readKey();
     boolean result = MK.getG1().getElement().isImmutable();
     System.out.println("Immutable: " + result);

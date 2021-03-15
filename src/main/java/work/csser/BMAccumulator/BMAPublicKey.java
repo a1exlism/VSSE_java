@@ -1,4 +1,4 @@
-package work.csser.accumulator;
+package work.csser.BMAccumulator;
 
 import it.unisa.dia.gas.jpbc.Element;
 import work.csser.utils.SerializableElement;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @className BAPublicKey
  * @since 2020/4/9 15:54
  */
-public class BAPublicKey implements Serializable {
+public class BMAPublicKey implements Serializable {
 
   private static final long serialVersionUID = -3011602482479597559L;
 
@@ -25,7 +25,7 @@ public class BAPublicKey implements Serializable {
     return pk;
   }
 
-  public BAPublicKey(ArrayList<SerializableElement> pk) {
+  public BMAPublicKey(ArrayList<SerializableElement> pk) {
     this.pk = pk;
   }
 
@@ -34,9 +34,9 @@ public class BAPublicKey implements Serializable {
    *  and should return a g^{k^i} set
    * t in paper Wang.et.al
    */
-  public static void generateKey(BAPrivateKey BAMK, int q) {
-    Element g = BAMK.getG().getElement().duplicate();
-    Element k = BAMK.getK().getElement().duplicate();
+  public static BMAPublicKey generateKey(BMAPrivateKey BMAMK, int q) {
+    Element g = BMAMK.getG().getElement().duplicate();
+    Element k = BMAMK.getK().getElement().duplicate();
 
     //  ATTENTION: Public Key also get the `g` value
     ArrayList<SerializableElement> pk = new ArrayList<>();
@@ -47,13 +47,14 @@ public class BAPublicKey implements Serializable {
     }
 
 
-    BAPublicKey BAPK = new BAPublicKey(pk);
+    BMAPublicKey BMAPK = new BMAPublicKey(pk);
 
-    SerializationDemonstrator.serialize(BAPK, "keys", "BA_public.key");
+    SerializationDemonstrator.serialize(BMAPK, "keys", "BMA_public.key");
+    return BMAPK;
   }
 
-  public static BAPublicKey readKey() {
-    return SerializationDemonstrator.deserialize("keys", "BA_public.key");
+  public static BMAPublicKey readKey() {
+    return SerializationDemonstrator.deserialize("keys", "BMA_public.key");
   }
 
 

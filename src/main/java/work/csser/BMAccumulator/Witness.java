@@ -1,4 +1,4 @@
-package work.csser.accumulator;
+package work.csser.BMAccumulator;
 
 import work.csser.utils.SerializableElement;
 
